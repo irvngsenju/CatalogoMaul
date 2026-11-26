@@ -1,46 +1,76 @@
-﻿using CatalogoMaui.ViewModels;
-using CatalogoMaui.Models;
-namespace CatalogoMaui
+﻿using CatalogoMaui.Models;
+using CatalogoMaui.ViewModels;
 
+namespace CatalogoMaui;
+
+public partial class MainPage : ContentPage
 {
-    public partial class MainPage : ContentPage
+    private readonly CatalogoViewModel vm = new();
+
+    public MainPage()
     {
-       
+        InitializeComponent();
+        // Conecta la pantalla con la lista del ViewModel.
+        BindingContext = vm;
+    }
 
-        public MainPage()
+    // Se vuelve a consultar SQLite al regresar del formulario.
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        try
         {
-            InitializeComponent();
-            // Conecta la pantalla con la lista del ViewModel.
-            BindingContext = new CatalogoViewModel();
+            await vm.CargarAsync();
         }
-
-        private bool abriendoDetalle;
-        private async void AlSeleccionarProducto(object? sender,
-        SelectionChangedEventArgs e)
+        catch (Exception ex)
         {
-            if (abriendoDetalle || e.CurrentSelection.Count == 0)
-                return;
-            if (sender is not CollectionView lista ||
+            await DisplayAlert("No se cargó el catálogo",
+                $"Revisa el almacenamiento disponible del dispositivo. {ex.Message}", "Aceptar");
+        }
+    }
+
+    private async void AlAgregarProducto(object? sender, EventArgs e)
+    {
+        if (abriendoDetalle) return;
+        abriendoDetalle = true;
+        try
+        {
+            await Shell.Current.GoToAsync("producto-detalle");
+        }
+        finally
+        {
+            abriendoDetalle = false;
+        }
+    }
+
+    private bool abriendoDetalle;
+
+    private async void AlSeleccionarProducto(object? sender, SelectionChangedEventArgs e)
+    {
+        if (abriendoDetalle || e.CurrentSelection.Count == 0)
+            return;
+
+        if (sender is not CollectionView lista ||
             e.CurrentSelection[0] is not Producto producto)
-                return;
-            abriendoDetalle = true;
-            try
-            {
-                // Permite tocar la misma tarjeta al regresar.
-                lista.SelectedItem = null;
-                // Enviamos el objeto completo, no solo su nombre.
-                var datos = new ShellNavigationQueryParameters
-            {
+            return;
+
+        abriendoDetalle = true;
+        try
+        {
+            // Permite tocar la misma tarjeta al regresar.
+            lista.SelectedItem = null;
+
+            // Enviamos el objeto completo, no solo su nombre.
+            var datos = new ShellNavigationQueryParameters
+        {
             { "producto", producto }
-            };
-                await Shell.Current.GoToAsync("producto-detalle", datos);
-            }
-            finally
-            {
-                abriendoDetalle = false;
-            }
+        };
+
+            await Shell.Current.GoToAsync("producto-detalle", datos);
         }
-
-
+        finally
+        {
+            abriendoDetalle = false;
+        }
     }
 }

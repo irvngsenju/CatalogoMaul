@@ -7,35 +7,38 @@
     x:Class="CatalogoMaui.MainPage"
     x:DataType="vm:CatalogoViewModel"
     Title="Catálogo">
-    <Grid Padding="16" RowDefinitions="Auto,*" RowSpacing="12">
-        <Label Text="Catálogo de productos"
-               FontSize="24" FontAttributes="Bold" />
-        <CollectionView Grid.Row="1"
+    <Grid Padding="16" RowDefinitions="Auto,Auto,*" RowSpacing="12">
+        <Label Text="Catálogo de productos" FontSize="24" FontAttributes="Bold" />
+        <Button Grid.Row="1" Text="+ Agregar producto" Clicked="AlAgregarProducto" />
+        <CollectionView
+            Grid.Row="2"
             ItemsSource="{Binding Productos}"
             SelectionMode="Single"
-            SelectionChanged="AlSeleccionarProducto">       
+            SelectionChanged="AlSeleccionarProducto">
+            <CollectionView.EmptyView>
+                <Label Text="No hay productos para mostrar." Margin="0,12" />
+            </CollectionView.EmptyView>
             <CollectionView.ItemsLayout>
-                <LinearItemsLayout Orientation="Vertical"
-                                   ItemSpacing="12" />
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="12" />
             </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <!-- El contexto de cada tarjeta es un Producto. -->
                 <DataTemplate x:DataType="models:Producto">
-                    <Border Stroke="#878787" StrokeThickness="1"
-                            StrokeShape="RoundRectangle 14"
-                            Padding="12">
+                    <Border
+                        Stroke="#878787"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 14"
+                        Padding="12">
                         <VerticalStackLayout Spacing="6">
-                            <Image Source="{Binding Foto}"
-                                   HeightRequest="145"
-                                   Aspect="AspectFill"
-                                   SemanticProperties.Description="{Binding Nombre}" />
+                            <Image
+                                Source="{Binding FotoVisible}"
+                                HeightRequest="145"
+                                Aspect="AspectFill"
+                                SemanticProperties.Description="{Binding Nombre}" />
 
-                            <Label Text="{Binding Nombre}"
-                                   FontSize="18" FontAttributes="Bold" />
-                            <Label Text="{Binding Descripcion}"
-                                   LineBreakMode="WordWrap" />
-                            <Label Text="{Binding Precio, StringFormat='MX$ {0:F2}'}"
-                                   FontAttributes="Bold" />
+                            <Label Text="{Binding Nombre}" FontSize="18" FontAttributes="Bold" />
+                            <Label Text="{Binding Descripcion}" LineBreakMode="WordWrap" />
+                            <Label Text="{Binding Precio, StringFormat='MX$ {0:F2}'}" FontAttributes="Bold" />
                         </VerticalStackLayout>
                     </Border>
                 </DataTemplate>

@@ -1,20 +1,35 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-xmlns:models="clr-namespace:CatalogoMaui.Models"
-x:Class="CatalogoMaui.Views.ProductoDetallePage"
-x:DataType="models:Producto"
-Title="Detalle del producto">
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="CatalogoMaui.Views.ProductoDetallePage"
+    Title="Producto">
     <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="14">
-            <Image Source="{Binding Foto}" HeightRequest="230"
-Aspect="AspectFit" />
-            <Label Text="{Binding Nombre}" FontSize="26"
-FontAttributes="Bold" />
-            <Label Text="{Binding Precio, StringFormat='MX$ {0:F2}'}"
-FontSize="20" FontAttributes="Bold" />
-            <Label Text="{Binding Detalle}" FontSize="16" />
+        <VerticalStackLayout Padding="20" Spacing="10">
+            <Image x:Name="VistaFoto" HeightRequest="150" Aspect="AspectFit" />
+            <Label Text="Nombre" />
+            <Entry x:Name="Nombre" MaxLength="100" />
+            <Label Text="Descripción breve para la tarjeta" />
+            <Entry x:Name="Descripcion" MaxLength="200" />
+            <Label Text="Descripción completa" />
+            <Editor x:Name="Detalle" MaxLength="1000" HeightRequest="90" />
+            <Label Text="Precio en pesos" />
+            <Entry x:Name="Precio" Keyboard="Numeric" Placeholder="Ejemplo: 89.50" />
+            <Label Text="Imagen" />
+            <Picker
+                x:Name="Foto"
+                Title="Selecciona una imagen"
+                SelectedIndexChanged="AlCambiarFoto" />
+            <Button
+                x:Name="ElegirFoto"
+                Text="Elegir foto de la galería"
+                Clicked="AlElegirFoto" />
+            <Button x:Name="Guardar" Text="Guardar" Clicked="AlGuardar" />
+            <Button
+                x:Name="Eliminar"
+                Text="Eliminar producto"
+                IsVisible="False"
+                Clicked="AlEliminar" />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
